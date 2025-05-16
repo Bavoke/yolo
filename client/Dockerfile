@@ -1,28 +1,30 @@
-# Use an official Node runtime as a parent image
-FROM node:14-slim AS build
+# Stage 1 - Build
+FROM node:16-slim AS build
 
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /usr/src/app
 
-# Copy the package.json and package-lock.json files to the container
+# Copy dependency files and install dependencies
 COPY package*.json ./
-
-# Install application dependencies
 RUN npm install
 
-# Copy the rest of the application code to the container
+# Copy the rest of the app
 COPY . .
 
-FROM alpine:3.16.7
+# Stage 2 - Production
+FROM node:16-alpine
 
+# Create app directory
 WORKDIR /app
 
-RUN apk update && apk add npm
+# Install serve globally
+RUN npm install -g serve
 
+# Copy built app from build stage
 COPY --from=build /usr/src/app /app
 
-# Expose the port the app runs on
+# Expose the port React runs on
 EXPOSE 3000
 
-# Define the command to run your app
-CMD ["npm", "start"]
+# Start the app
+CMD ["serve", "-s", "build", "-l", "3000"]

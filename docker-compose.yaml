@@ -9,61 +9,52 @@
 version: "3.8"
 
 services:
-
-  #Builds the frontend Docker image and creates the frontend microservice
-  brian-yolo-client:
-    image: brianbwire/brian-yolo-client:v1.0.0
-    build: ./client
-    container_name: brian-yolo-client
-    stdin_open: true
-    tty: true
+  # Frontend Service
+  frontend_app:
+    image: kelvinbavoke/frontend_app:latest
+    container_name: frontend_app
     ports:
-      - "3000:3000"
-    depends_on: 
-      - brian-yolo-backend
+      - "80:3000"
+    depends_on:
+      - backend_app
     networks:
-      - app-net
-
-  #Builds the backend Docker image and creates the backend microservice
-  brian-yolo-backend:
-    image: brianbwire/brian-yolo-backend:v1.0.0
-    build: ./backend
-    container_name: brian-yolo-backend
+      - app-network
     stdin_open: true
     tty: true
-    restart: always
+
+  # Backend Service
+  backend_app:
+    image: kelvinbavoke/backend_app:latest
+    container_name: backend_app
     ports:
       - "5000:5000"
-    depends_on: 
-      - app-ip-mongo
+    depends_on:
+      - mongo_db
+    environment:
+      - MONGODB_URI=mongodb://mongo_db:27017/yolomy
     networks:
-      - app-net
+      - app-network
+    restart: always
+    stdin_open: true
+    tty: true
 
-  #Creates the database microservice
-  app-ip-mongo:
+  # MongoDB Service
+  mongo_db:
     image: mongo
-    container_name: app-mongo
+    container_name: mongo_db
     ports:
       - "27017:27017"
-    networks:
-      - app-net
     volumes:
-      - type: volume
-        source: app-mongo-data
-        target: /data/db
+      - mongo_data:/data/db
+    networks:
+      - app-network
 
-#Creates the network infrastructure necessary for the containers to communicate with each other
+# Shared Network
 networks:
-  app-net:
-    name: app-net
+  app-network:
     driver: bridge
-    attachable: true
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16 
-          ip_range: 172.20.0.0/16 
 
-#Creates a Docker volume that persists all the data stored in the database
+# Persistent Data Volume
 volumes:
-  app-mongo-data:
+  mongo_data:
     driver: local
