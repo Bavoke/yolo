@@ -144,4 +144,5 @@ Using meaningful repository names like kelvinbavoke/backend_app helps identify o
 - kelvinbavoke/backend_app:latest
 - kelvinbavoke/frontend_app:latest
 Example caption:
-![DockerHub Screenshot][./kelvin_bavoke_dockerhub.png]
+
+![DockerHub Screenshot](./kelvin_bavoke_dockerhub.png)
