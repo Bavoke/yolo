@@ -1,0 +1,4 @@
+---
+frontend_container_name: "frontend_app"
+frontend_port: "3000"
+frontend_image: "kelvinbavoke/frontend_app:latest"

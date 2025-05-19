@@ -1,4 +1,5 @@
 ---
-container_name: brian-yolo-backend
-network: app-net
-volume: app-mongo-data/app
+backend_container_name: "backend_app"
+backend_port: "5000"
+backend_image: "kelvinbavoke/backend_app:latest"
+mongo_connection_string: "mongodb://mongo_db:27017/yolomy"

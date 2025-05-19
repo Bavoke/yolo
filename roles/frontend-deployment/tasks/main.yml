@@ -1,0 +1,16 @@
+- name: Pull frontend image
+  docker_image:
+    name: "{{ frontend_image }}"
+    source: pull
+
+- name: Start frontend container
+  docker_container:
+    name: "{{ frontend_container_name }}"
+    image: "{{ frontend_image }}"
+    ports:
+      - "{{ frontend_port }}:3000"
+    networks:
+      - "{{ network_name }}"
+    depends_on:
+      - backend_app
+    recreate: yes
