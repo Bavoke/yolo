@@ -1,56 +1,96 @@
-# Yolo E-Commerce App - DevOps Stage 1
+# Stage Two – Terraform + Ansible Automation
 
-This project deploys a full-stack application using Ansible roles for each service.
+In this stage, I've extended my earlier Vagrant + Ansible automation to use **Terraform** for infrastructure provisioning and **Ansible** for application configuration.
+
+## What's Included
+
+- ✅ Terraform scripts to spin up MongoDB, backend, and frontend containers
+- ✅ Ansible playbook reused from Stage 1
+- ✅ Data persistence via named volume (`mongo_data`)
+- ✅ Container networking (`app-network`)
+- ✅ End-to-end connectivity between services
 
 ## Requirements
 
-- Vagrant (on Windows)
-- VirtualBox
-- WSL or Git Bash (for Ansible)
+- Terraform CLI
+- Docker installed locally
+- Ansible (optional, if you're running Ansible manually)
+- Internet access for image pulls
 
-## Setup Instructions
+## How to Use
 
-1. Make sure Vagrant and VirtualBox are installed.
-2. Run:
-   ```powershell
-   vagrant up
+1. Clone this repo:
+   ```bash
+   git clone -b Stage_two https://github.com/Bavoke/yolo.git 
+   cd yolo
 
-   The app will be available at: http://localhost:8080
 
-   
-✅ Save and exit.
+1. Initialize Terraform:
+bash
+
+ terraform init
+ 
+ 
+ 3.Apply:
+
+ bash 
+ terraform apply
+
+
+4. Open browser:
+
+ http://localhost:3000
+
+
+
+5.  Try adding products via form – they should persist across restarts
+
+
+**Deliverables**
+- ✅ Infrastructure created using Terraform
+- ✅ Services configured using Ansible
+- ✅ Reproducible environment
+- ✅ End-to-end product persistence
+
+
 
 ---
 
-## 🔹 Step 9: Create `explanation.md`
+## 📝 Example `explanation.md`
 
-```bash
-nano explanation.md
-
-
-# Ansible Playbook Explanation
-
-This Ansible playbook uses modular roles to deploy a full-stack e-commerce dashboard.
-
-## Roles
-
-1. **setup-mongodb**: Sets up MongoDB container with persistent volume and custom network.
-2. **backend-deployment**: Deploys Node.js backend connected to MongoDB.
-3. **frontend-deployment**: Deploys React frontend connected to backend.
-
-Each role defines:
-- Variables in `vars/main.yml`
-- Tasks in `tasks/main.yml`
-
-## Tags
-
-Each role is tagged:
-- `mongodb`, `backend`, `frontend`
-
-This allows selective execution during testing or troubleshooting.
+```markdown
+# Explanation Document – Stage Two
 
 ## Execution Flow
 
-1. The playbook runs on a Vagrant-provisioned Ubuntu VM.
-2. It pulls images and starts containers in order: MongoDB → Backend → Frontend.
-3. All containers run on a shared network to allow communication.
+1. Terraform creates Docker containers using the Docker provider
+2. Containers are attached to a shared network (`app-network`)
+3. Ansible runs against each container to configure and deploy the app
+4. Product data persists in MongoDB via a named volume
+
+## Role Breakdown
+
+- `setup-docker`: Ensures Docker is available
+- `setup-mongodb`: Pulls and starts MongoDB container
+- `backend-deployment`: Deploys Node.js API and connects to DB
+- `frontend-deployment`: Deploys React frontend and exposes port 3000
+
+## Module Usage
+
+- `docker_container`: Used to define and run each service
+- `docker_network`: Ensures containers can communicate
+- `docker_volume`: Ensures MongoDB saves data
+- `ansible` module: Reused for configuration and deployment
+
+## Tagging Strategy
+
+Each role has its own tag (`docker`, `mongodb`, `backend`, `frontend`) allowing selective execution.
+
+## Final Notes
+
+This automation allows anyone to run:
+```bash
+terraform apply
+
+
+And get a fully working, containerized e-commerce platform.

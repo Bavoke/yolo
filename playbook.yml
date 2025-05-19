@@ -1,17 +1,21 @@
 ---
-- name: Deploy Full Stack Application Using Dockerized Roles
-  hosts: all
+- name: Configure MongoDB
+  hosts: mongo_db
   become: yes
-
   roles:
-    - role: setup-docker
-      tags: ["docker"]
-
     - role: setup-mongodb
       tags: ["mongodb"]
 
+- name: Deploy backend API
+  hosts: backend_app
+  become: yes
+  roles:
     - role: backend-deployment
       tags: ["backend"]
 
+- name: Deploy frontend UI
+  hosts: frontend_app
+  become: yes
+  roles:
     - role: frontend-deployment
       tags: ["frontend"]
