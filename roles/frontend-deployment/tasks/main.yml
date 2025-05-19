@@ -10,7 +10,5 @@
     ports:
       - "{{ frontend_port }}:3000"
     networks:
-      - "{{ network_name }}"
-    depends_on:
-      - backend_app
+      - name: "{{ network_name }}"
     recreate: yes

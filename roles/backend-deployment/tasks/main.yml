@@ -12,7 +12,5 @@
     env:
       MONGODB_URI: "{{ mongo_connection_string }}"
     networks:
-      - "{{ network_name }}"
-    depends_on:
-      - mongo_db
+      - name: "{{ network_name }}"
     recreate: yes

@@ -1,0 +1,27 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install required packages (docker, python3-pip)
+  apt:
+    name:
+      - docker.io
+      - python3-pip
+      - docker-compose
+    state: present
+
+- name: Ensure Docker is running and enabled on boot
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Install Python Docker module
+  pip:
+    name: docker
+
+- name: Add vagrant user to docker group
+  become: yes
+  shell: |
+    sudo usermod -aG docker vagrant

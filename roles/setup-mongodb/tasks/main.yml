@@ -19,5 +19,5 @@
     volumes:
       - "{{ mongo_volume }}:/data/db"
     networks:
-      - "{{ network_name }}"
+      - name: "{{ network_name }}"
     recreate: yes

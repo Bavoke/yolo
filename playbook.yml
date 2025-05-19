@@ -4,6 +4,9 @@
   become: yes
 
   roles:
+    - role: setup-docker
+      tags: ["docker"]
+
     - role: setup-mongodb
       tags: ["mongodb"]
 
