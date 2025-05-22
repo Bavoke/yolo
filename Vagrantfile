@@ -17,4 +17,4 @@ Vagrant.configure("2") do |config|
     ansible.limit = "all"
     ansible.compatibility_mode = "2.0"
   end
-end"
+end
