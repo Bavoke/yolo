@@ -6,7 +6,7 @@ Vagrant.configure("2") do |config|
 
   # Use Docker as the provider
   config.vm.provider "docker" do |d|
-    d.image = "geerlingguy/docker-ubuntu2004"  # You could use ubuntu:20.04 too
+    d.image = "ubuntu:20.04"  # You could use ubuntu:20.04 too
     d.remains_running = true
     d.name = "yolo-app-container"
   end
