@@ -1,6 +1,6 @@
 # Vagrantfile
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu:20.04"  # Base box with Docker support
+  #config.vm.box = "ubuntu:20.04"  # Base box with Docker support
 
   config.vm.hostname = "yolo-app"
 
