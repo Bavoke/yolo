@@ -1,16 +1,26 @@
 # Vagrantfile
 Vagrant.configure("2") do |config|
-  config.vm.box = "geerlingguy/ubuntu2004"
+  config.vm.box = "geerlingguy/docker-ubuntu2004"  # Base box with Docker support
+
   config.vm.hostname = "yolo-app"
+
+  # Use Docker as the provider
+  config.vm.provider "docker" do |d|
+    d.image = "geerlingguy/docker-ubuntu2004"  # You could use ubuntu:20.04 too
+    d.remains_running = true
+    d.name = "yolo-app-container"
+  end
+
+  # Port forwarding (Docker maps host:container)
   config.vm.network "forwarded_port", guest: 3000, host: 3000
   config.vm.network "forwarded_port", guest: 27017, host: 27017
   config.vm.network "forwarded_port", guest: 22, host: 2222
 
-  config.vm.provider "virtualbox" do |vb|
-    vb.memory = "2048"
-    vb.cpus = 2
-  end
+  # Shared folder (optional)
+  config.vm.synced_folder ".", "/vagrant"
 
+
+  # Provision with Ansible (must be installed on host)
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "playbook.yml"
     ansible.inventory_path = "inventory.ini"
